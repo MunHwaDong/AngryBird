@@ -10,8 +10,6 @@ public class GameManager : Singleton<GameManager>
 
     public void Start()
     {
-        //EventBus.RegisterEvent(EventType.STARTGAME, InitStage);
-        
         InitStage();
     }
 

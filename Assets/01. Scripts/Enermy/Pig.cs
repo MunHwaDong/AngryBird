@@ -5,7 +5,7 @@ using UnityEngine;
 public class Pig : Breakable
 {
     //내구성 - HP
-    private const float Fracture = 100f;
+    private const float Fracture = 200f;
     private bool isPlaying = false;
     
     private float currentFracture;
@@ -16,6 +16,7 @@ public class Pig : Breakable
     private Rigidbody2D rb;
     
     [SerializeField] private Sprite[] sprites;
+    [SerializeField] private Sprite scoreSprite;
 
     void Start()
     {
@@ -57,8 +58,12 @@ public class Pig : Breakable
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName("Die"))
         {
             rb.simulated = false;
+            transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
+            
             animator.Rebind();
             animator.Play("Die");
+            
+            onDestoryBehaviour?.Invoke();
         }
         
         yield return new WaitForSeconds(1f);
