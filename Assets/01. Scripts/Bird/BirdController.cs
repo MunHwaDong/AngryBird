@@ -6,25 +6,25 @@ using UnityEngine;
 public class BirdController : MonoBehaviour
 {
     private Rigidbody2D rb;
+    [NonSerialized] public Dragable bird;
 
-    private void Start()
+    public delegate void OnCollisionEvent();
+    public event OnCollisionEvent OnCollision;
+
+    private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        bird = GetComponent<Dragable>();
 
         rb.gravityScale = 0f;
-        
-        EventBus.RegisterEvent(EventType.SHOT, OnUseGravity);
-    }
-
-    void OnUseGravity()
-    {
-        rb.gravityScale = 1f;
     }
 
     public void OnCollisionEnter2D(Collision2D other)
     {
         var instance = GameManager.Instance;
         
-        instance.ResolutionCollision(other.gameObject.GetInstanceID());
+        instance.ResolutionCollision(other);
+        
+        OnCollision?.Invoke();
     }
 }

@@ -1,55 +1,56 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class BirdRigidbody : MonoBehaviour
 {
-    private GameObject bird;
-    
     private Dragable dragable;
     private Rigidbody2D rb;
+    private BirdController birdController;
+    
+    private Coroutine coroutine;
+    [SerializeField] private GameObject trajectorySprite;
     
     void Awake()
     {
-        bird = transform.parent.gameObject;
-        dragable = bird.GetComponent<Dragable>();
+        dragable = GetComponentInParent<Dragable>();
+        birdController = GetComponentInParent<BirdController>();
         rb = GetComponentInParent<Rigidbody2D>();
+        
+        coroutine = null;
 
         dragable.OnShot += ApplyForce;
+        birdController.OnCollision += StopDrawTrajectory;
     }
 
     void ApplyForce(Vector3 force)
     {
-        Debug.Log("shot " + force);
-
         rb.gravityScale = 1f;
         
         force = new Vector3(force.x, force.y, -1f);
-        //rb.AddForce(force, ForceMode2D.Impulse);
         
-        StartCoroutine(ApplyForceCoroutine(force));
+        rb.AddForce(force, ForceMode2D.Impulse);
+
+        if (coroutine != null)
+        {
+            StopCoroutine(coroutine);
+        }
+        
+        coroutine = StartCoroutine(DrawTrajectoryCoroutine());
     }
 
-    IEnumerator ApplyForceCoroutine(Vector3 force)
+    IEnumerator DrawTrajectoryCoroutine() 
     {
-        float dt = 0.02f;
-        
-        Vector3 velocity = force / rb.mass;
-        Vector3 position = bird.transform.position;
-        
-        while (true)
+        while (rb.velocity.magnitude > 0.1f)
         {
-            velocity += (velocity + (Physics.gravity / rb.mass)) * dt;
-            position += velocity * dt;
-        
-            if (velocity.magnitude <= 0.01f)
-            {
-                break;
-            }
-            
-            bird.transform.position = position;
-            
-            yield return null;
+            yield return new WaitForFixedUpdate();
+            Instantiate(trajectorySprite, new Vector3(rb.position.x, rb.position.y, -1f), Quaternion.identity);
         }
+    }
+
+    void StopDrawTrajectory()
+    {
+        StopCoroutine(coroutine);
     }
 }

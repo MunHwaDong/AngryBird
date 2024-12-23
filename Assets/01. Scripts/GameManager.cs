@@ -6,6 +6,8 @@ public class GameManager : Singleton<GameManager>
 {
     private IDictionary<int, Breakable> breakables = new Dictionary<int, Breakable>();
 
+    public int currentEnermyCount = 0;
+
     public void Start()
     {
         //EventBus.RegisterEvent(EventType.STARTGAME, InitStage);
@@ -19,17 +21,24 @@ public class GameManager : Singleton<GameManager>
 
         foreach (var breakObj in breakObjs)
         {
+            if (breakObj is Pig)
+            {
+                currentEnermyCount++;
+            }
+            
             breakables.Add(breakObj.gameObject.GetInstanceID(), breakObj);
         }
     }
 
-    public void ResolutionCollision(int instanceID)
+    public void ResolutionCollision(Collision2D other)
     {
-        if (breakables.ContainsKey(instanceID))
-        {
-            Breakable collider = breakables[instanceID];
+        int id = other.gameObject.GetInstanceID();
         
-            collider.Break();
+        if (breakables.ContainsKey(id))
+        {
+            Breakable collider = breakables[id];
+        
+            collider.Break(other);
         }
     }
 }

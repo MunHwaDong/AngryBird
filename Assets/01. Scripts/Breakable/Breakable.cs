@@ -4,5 +4,5 @@ using UnityEngine;
 
 public abstract class Breakable : MonoBehaviour
 {
-    public abstract void Break();
+    public abstract void Break(Collision2D other);
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Dragable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class Dragable : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDragHandler
 {
     public delegate void ChangeBirdPosition(Vector3 position);
     public event ChangeBirdPosition OnChangeBird;
@@ -13,16 +13,14 @@ public class Dragable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
     public event ShotBird OnShot;
 
     private Vector3 startPosition;
-    private Vector3 force;
-
-    void Awake()
-    {
-        startPosition = transform.position;
-    }
+    private Vector3 endPosition;
     
-    public void OnBeginDrag(PointerEventData eventData)
+    private Vector3 force;
+    private float SpriteOffset;
+
+    public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("OnPointerDown");
+        startPosition = Camera.main.ScreenToWorldPoint(new Vector3(eventData.position.x, eventData.position.y, Camera.main.WorldToScreenPoint(eventData.position).z));
     }
     
     public void OnDrag(PointerEventData eventData)
@@ -30,21 +28,21 @@ public class Dragable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDrag
         Vector3 newPosition = Camera.main.ScreenToWorldPoint(new Vector3(
             eventData.position.x, eventData.position.y, Camera.main.WorldToScreenPoint(transform.position).z));
 
-        transform.position = newPosition;
-        
-        CalcForce(startPosition, newPosition);
+        transform.position = endPosition = newPosition;
 
         OnChangeBird?.Invoke(newPosition);
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        CalcForce();
+        
         OnShot?.Invoke(-force);
     }
 
-    private void CalcForce(Vector3 v1, Vector3 v2)
+    private void CalcForce()
     {
-        Vector3 forceDirection = v2 - v1;
+        Vector3 forceDirection = endPosition - startPosition;
         
         float scalar = forceDirection.magnitude;
         
