@@ -1,15 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
     private IDictionary<int, Breakable> breakables = new Dictionary<int, Breakable>();
 
+    public Animator collisionAnimation;
     public int currentEnermyCount = 0;
 
-    public void Start()
+    public delegate void OnFinishedInitBehaviours();
+    public event OnFinishedInitBehaviours onFinishedInitBehaviours;
+
+    void Start()
     {
+        //base.Awake();
+
         InitStage();
     }
 
@@ -25,6 +32,16 @@ public class GameManager : Singleton<GameManager>
             }
             
             breakables.Add(breakObj.gameObject.GetInstanceID(), breakObj);
+        }
+        
+        onFinishedInitBehaviours?.Invoke();
+    }
+
+    public IEnumerable<Breakable> GetBreakables()
+    {
+        foreach (var VARIABLE in breakables)
+        {
+            yield return VARIABLE.Value;
         }
     }
 

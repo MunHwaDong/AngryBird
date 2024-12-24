@@ -5,18 +5,24 @@ using UnityEngine;
 
 public class SlingShotController : MonoBehaviour
 {
+    private BirdSpawner birdSpawner;
     private LineRenderer[] rubberbands;
-
     private Dragable bird;
 
     private float maxLength = 10f;
 
-    void Start()
+    void Awake()
     {
         rubberbands = GetComponentsInChildren<LineRenderer>();
-        
-        bird = FindObjectOfType<Dragable>();
+        birdSpawner = FindObjectOfType<BirdSpawner>();
 
+        birdSpawner.onBirdSpawned += Init;
+    }
+
+    void Init(Dragable drag)
+    {
+        bird = drag;
+        
         bird.OnChangeBird += UpdateRubberband;
         bird.OnShot += OscillationBand;
     }

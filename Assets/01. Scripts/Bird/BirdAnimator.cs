@@ -4,32 +4,47 @@ using UnityEngine;
 
 public class BirdAnimator : MonoBehaviour
 {
-    private Animator birdAnimator;
-    private BirdController birdController;
+    private BirdController _birdController;
     
-    [SerializeField] private Animator CollisionAnimator;
+    private Animator CollisionAnimator;
 
     void Start()
     {
-        birdAnimator = GetComponentInParent<Animator>();
-        birdController = GetComponentInParent<BirdController>();
+        _birdController = GetComponentInParent<BirdController>();
 
-        birdController.OnCollision += PlayCollisionAnimation;
-        birdController.OnCollision += PlayIdleAnimation;
+        CollisionAnimator = GameManager.Instance.collisionAnimation;
+
+        _birdController.OnCollision += PlayCollisionAnimation;
+        _birdController.OnCollision += PlayIdleAnimation;
         
-        birdController.bird.OnShot += PlayFlyAnimation;
+        _birdController.onInputBehviour += PlaySkillAnimation;
+        
+        _birdController.Bird.OnShot += PlayFlyAnimation;
     }
 
     void PlayFlyAnimation(Vector3 dummy)
     {
-        birdAnimator.Rebind();
-        birdAnimator.Play("Fly");
+        _birdController.Animator.Rebind();
+        _birdController.Animator.Play("Fly");
     }
     
     void PlayIdleAnimation()
     {
-        birdAnimator.Rebind();
-        birdAnimator.Play("Idle");
+        _birdController.Animator.Rebind();
+        _birdController.Animator.Play("Idle");
+    }
+    
+    void PlaySkillAnimation()
+    {
+        _birdController.OnCollision -= PlayIdleAnimation;
+        _birdController.OnCollision += () =>
+        {
+            _birdController.Animator.Rebind();
+            _birdController.Animator.Play("Collision");
+        };
+        
+        _birdController.Animator.Rebind();
+        _birdController.Animator.Play("Skill");
     }
 
     void PlayCollisionAnimation()

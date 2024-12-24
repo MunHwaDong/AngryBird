@@ -7,6 +7,8 @@ public class Pig : Breakable
     //내구성 - HP
     private const float Fracture = 200f;
     private bool isPlaying = false;
+
+    private int score = 10000;
     
     private float currentFracture;
     private SpriteRenderer spriteRenderer;
@@ -62,8 +64,7 @@ public class Pig : Breakable
             
             animator.Rebind();
             animator.Play("Die");
-            
-            onDestoryBehaviour?.Invoke();
+            onDestoryBehaviour?.Invoke(score);
         }
         
         yield return new WaitForSeconds(1f);

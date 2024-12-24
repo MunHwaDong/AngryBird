@@ -5,32 +5,28 @@ using UnityEngine.PlayerLoop;
 
 public class BirdRigidbody : MonoBehaviour
 {
-    private Dragable dragable;
-    private Rigidbody2D rb;
-    private BirdController birdController;
-    
+    private BirdController _birdController;
     private Coroutine coroutine;
+    
     [SerializeField] private GameObject trajectorySprite;
     
     void Awake()
     {
-        dragable = GetComponentInParent<Dragable>();
-        birdController = GetComponentInParent<BirdController>();
-        rb = GetComponentInParent<Rigidbody2D>();
+        _birdController = GetComponentInParent<BirdController>();
         
         coroutine = null;
 
-        dragable.OnShot += ApplyForce;
-        birdController.OnCollision += StopDrawTrajectory;
+        _birdController.Bird.OnShot += ApplyForce;
+        _birdController.OnCollision += StopDrawTrajectory;
     }
 
     void ApplyForce(Vector3 force)
     {
-        rb.gravityScale = 1f;
+        _birdController.Rb.gravityScale = 1f;
         
         force = new Vector3(force.x, force.y, -1f);
         
-        rb.AddForce(force, ForceMode2D.Impulse);
+        _birdController.Rb.AddForce(force, ForceMode2D.Impulse);
 
         if (coroutine != null)
         {
@@ -42,10 +38,10 @@ public class BirdRigidbody : MonoBehaviour
 
     IEnumerator DrawTrajectoryCoroutine() 
     {
-        while (rb.velocity.magnitude > 0.1f)
+        while (_birdController.Rb.velocity.magnitude > 0.1f)
         {
             yield return new WaitForFixedUpdate();
-            Instantiate(trajectorySprite, new Vector3(rb.position.x, rb.position.y, -1f), Quaternion.identity);
+            Instantiate(trajectorySprite, new Vector3(_birdController.Rb.position.x, _birdController.Rb.position.y, -1f), Quaternion.identity);
         }
     }
 
