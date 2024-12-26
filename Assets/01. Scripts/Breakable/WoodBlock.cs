@@ -60,7 +60,7 @@ public class WoodBlock : Breakable
 
         onDestoryBehaviour?.Invoke(score);
         
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         
         Destroy(gameObject);
     }

@@ -19,8 +19,13 @@ public class BirdController : MonoBehaviour
     
     private BirdSkillStrategy _skillStrategy;
     public BirdSkillStrategy SkillStrategy { get => (_skillStrategy ?? (_skillStrategy = GetComponent<BirdSkillStrategy>())); }
+
+    private BirdAudioSource _birdAudioSource;
+    public BirdAudioSource BirdAudioSource { get => (_birdAudioSource ?? (_birdAudioSource = GetComponentInChildren<BirdAudioSource>())); }
     
     private Coroutine _coroutine;
+    
+    public ICommand skillCommand;
 
     public delegate void OnCollisionEvent();
     public event OnCollisionEvent OnCollision;
@@ -28,18 +33,12 @@ public class BirdController : MonoBehaviour
     public delegate void OnInputBehviour();
     public event OnInputBehviour onInputBehviour;
     
-    private void Start()
+    protected void Awake()
     {
         Rb.gravityScale = 0f;
-
-        if (SkillStrategy != null)
-        {
-            Bird.OnShot += WaitForPlayerInput;
-            OnCollision += StopWaitingInputCoroutine;
-        }
     }
 
-    void WaitForPlayerInput(Vector3 dummy)
+    public void WaitForPlayerInput(Vector3 dummy)
     {
         if(_coroutine != null)
             StopCoroutine(_coroutine);
@@ -47,7 +46,7 @@ public class BirdController : MonoBehaviour
         _coroutine = StartCoroutine(WaitingInputCoroutine());
     }
 
-    void StopWaitingInputCoroutine()
+    public void StopWaitingInputCoroutine()
     {
         if(_coroutine != null)
             StopCoroutine(_coroutine);
@@ -59,7 +58,7 @@ public class BirdController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                SkillStrategy.BirdSkill(this);
+                skillCommand.Execute();
                 onInputBehviour?.Invoke();
                 break;
             }

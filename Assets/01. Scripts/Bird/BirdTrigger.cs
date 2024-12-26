@@ -5,9 +5,11 @@ using UnityEngine;
 public class BirdTrigger : MonoBehaviour
 {
     private BirdController _birdController;
-    private Coroutine _coroutine;
+
+    private Coroutine _lifeCoroutine = null;
+    private Coroutine _observeCoroutine = null;
     
-    private const float limitTime = 5f;
+    private const float limitTime = 6f;
     
     void Start()
     {
@@ -23,17 +25,17 @@ public class BirdTrigger : MonoBehaviour
         
         EventBus.Publish(EventType.COLLISION);
         
-        if(_coroutine != null)
-            StopCoroutine(_coroutine);
+        if(_lifeCoroutine != null)
+            StopCoroutine(_lifeCoroutine);
         
-        _coroutine = StartCoroutine(LifeTimer());
+        _lifeCoroutine = StartCoroutine(LifeTimer());
     }
 
     void ObservingBirdMovement()
     {
-        if(_coroutine != null) StopCoroutine(_coroutine);
+        if(_observeCoroutine != null) StopCoroutine(_observeCoroutine);
         
-        _coroutine = StartCoroutine(ObservingBirdMoveCoroutine());
+        _observeCoroutine = StartCoroutine(ObservingBirdMoveCoroutine());
     }
 
     IEnumerator ObservingBirdMoveCoroutine()
@@ -41,9 +43,11 @@ public class BirdTrigger : MonoBehaviour
         while (true)
         {
             yield return new WaitForFixedUpdate();
-            if (_birdController.Rb.velocity.magnitude <= 0.5f) break;
+            if (_birdController.Rb.velocity.magnitude <= 0.01f) break;
         }
         
+        StopCoroutine(_observeCoroutine);
+        StopCoroutine(_lifeCoroutine);
         EventBus.Publish(EventType.ENDTURN);
         Destroy(this);
     }
@@ -52,6 +56,8 @@ public class BirdTrigger : MonoBehaviour
     {
         yield return new WaitForSeconds(limitTime);
         
+        StopCoroutine(_observeCoroutine);
+        StopCoroutine(_lifeCoroutine);
         EventBus.Publish(EventType.ENDTURN);
         Destroy(this);
     }

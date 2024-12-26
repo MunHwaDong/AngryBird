@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "448204285133",
+    "firebase_url": "https://angry-bird-project-af17c-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "angry-bird-project-af17c",
+    "storage_bucket": "angry-bird-project-af17c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:448204285133:android:aaec2e493da2c04c5c7584",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.AngryBird"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhcNqNroGf1cTSnSgUS7SGxcGXOUOGGeE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -29,7 +29,6 @@ public class ScoreAnimation : MonoBehaviour
     {
         gameObject.SetActive(true);
         
-        //transform.localScale = new Vector3(1, 1, 1);
         transform.parent.localScale = new Vector3(1, 1, 1);;
         
         float percent = 0;
@@ -44,5 +43,17 @@ public class ScoreAnimation : MonoBehaviour
         }
         
         yield return new WaitForSeconds(1f);
+        
+        percent = 0;
+
+        while (percent < playTime)
+        {
+            percent += Time.deltaTime * animationSpeed;
+            
+            transform.localScale = Vector3.Lerp(new Vector3(10f, 10f, 1f), new Vector3(0f, 0f, 1f), percent / playTime);
+            
+            yield return null;
+        }
     }
+    
 }

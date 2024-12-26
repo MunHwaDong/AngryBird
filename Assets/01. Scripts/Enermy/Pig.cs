@@ -41,8 +41,7 @@ public class Pig : Breakable
         {
             isPlaying = true;
             StartCoroutine(PlayDieAnimation());
-
-            GameManager.Instance.currentEnermyCount--;
+            
             return;
         }
         
@@ -64,10 +63,11 @@ public class Pig : Breakable
             
             animator.Rebind();
             animator.Play("Die");
+            
             onDestoryBehaviour?.Invoke(score);
         }
         
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
         
         Destroy(gameObject);
     }
