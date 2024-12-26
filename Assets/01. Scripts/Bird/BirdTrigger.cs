@@ -13,16 +13,9 @@ public class BirdTrigger : MonoBehaviour
     {
         _birdController = GetComponentInParent<BirdController>();
         _birdController.OnCollision += LifeTime;
+        _birdController.OnCollision += ObservingBirdMovement;
     }
     
-    public void OnTriggerEnter2D(Collider2D other)
-    {
-        if(_coroutine != null)
-            StopCoroutine(_coroutine);
-        
-        _coroutine = StartCoroutine(ObservingBirdMovement());
-    }
-
     //어떤 종류의 충돌체인지 상관 없이 첫 충돌 후 리미트 타임만큼 지나면 자동으로 다음 Bird를 생성한다.
     private void LifeTime()
     {
@@ -36,7 +29,14 @@ public class BirdTrigger : MonoBehaviour
         _coroutine = StartCoroutine(LifeTimer());
     }
 
-    IEnumerator ObservingBirdMovement()
+    void ObservingBirdMovement()
+    {
+        if(_coroutine != null) StopCoroutine(_coroutine);
+        
+        _coroutine = StartCoroutine(ObservingBirdMoveCoroutine());
+    }
+
+    IEnumerator ObservingBirdMoveCoroutine()
     {
         while (true)
         {

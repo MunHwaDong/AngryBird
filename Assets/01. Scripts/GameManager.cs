@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -6,6 +7,8 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     private IDictionary<int, Breakable> breakables = new Dictionary<int, Breakable>();
+    
+    [NonSerialized] public TrajectoryQueue trajectoryQueue;
 
     public Animator collisionAnimation;
     public int currentEnermyCount = 0;
@@ -15,8 +18,8 @@ public class GameManager : Singleton<GameManager>
 
     void Start()
     {
-        //base.Awake();
-
+        trajectoryQueue = FindObjectOfType<TrajectoryQueue>();
+        
         InitStage();
     }
 
