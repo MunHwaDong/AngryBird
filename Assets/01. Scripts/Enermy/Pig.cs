@@ -6,7 +6,6 @@ public class Pig : Breakable
 {
     //내구성 - HP
     private const float Fracture = 200f;
-    private bool isPlaying = false;
 
     private int score = 10000;
     
@@ -41,8 +40,6 @@ public class Pig : Breakable
         
         if (0 >= currentFracture)
         {
-            isPlaying = true;
-            
             if(_coroutine == null)
                 _coroutine = StartCoroutine(PlayDieAnimation());
             

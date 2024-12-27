@@ -7,6 +7,8 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     private IDictionary<int, Breakable> breakables = new Dictionary<int, Breakable>();
+
+    private AudioSource _endDirectingSound;
     
     [NonSerialized] public TrajectoryQueue trajectoryQueue;
 
@@ -22,6 +24,7 @@ public class GameManager : Singleton<GameManager>
     void Awake()
     {
         trajectoryQueue = FindObjectOfType<TrajectoryQueue>();
+        _endDirectingSound = GetComponent<AudioSource>();
      
         playData = new PlayData();
         
@@ -82,11 +85,18 @@ public class GameManager : Singleton<GameManager>
 
     void CheckEndGameCondition(int dummy)
     {
-        Debug.Log(playData.currentEnemiesNum);
-        
         if (playData.currentEnemiesNum <= 0)
         {
-            EventBus.Publish(EventType.ENDGAME);
+            StartCoroutine(EndDirectingCoroutine());
         }
+    }
+
+    IEnumerator EndDirectingCoroutine()
+    {
+        _endDirectingSound.Play();
+        
+        yield return new WaitForSeconds(4f);
+        
+        EventBus.Publish(EventType.ENDGAME);
     }
 }

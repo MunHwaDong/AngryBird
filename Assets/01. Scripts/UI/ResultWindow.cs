@@ -13,6 +13,8 @@ public class ResultWindow : MonoBehaviour
     [SerializeField] private Image stars;
 
     [SerializeField] private Image highScoreStamp;
+    
+    [SerializeField] private AudioSource resultSound;
 
     void Awake()
     {
@@ -22,6 +24,8 @@ public class ResultWindow : MonoBehaviour
     public void SetResult()
     {
         PlayData currentStageData = GameManager.Instance.PlayData;
+        
+        resultSound.Play();
 
         currentScore.text = "Score : " + currentStageData.currentScore.ToString();
         
