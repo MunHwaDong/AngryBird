@@ -38,7 +38,8 @@ public class GameManager : Singleton<GameManager>
             {
                 playData.currentEnemiesNum++;
                 
-                breakObj.onDestoryBehaviour += playData.UpdateEnemiesNum;
+                breakObj.onDestoryBehaviour += UpdateCurrentEnemiesNum;
+                
                 breakObj.onDestoryBehaviour += playData.UpdateCurrentScore;
                 
                 breakObj.onDestoryBehaviour += CheckEndGameCondition;
@@ -74,8 +75,15 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    void UpdateCurrentEnemiesNum(int dummy)
+    {
+        playData.currentEnemiesNum--;
+    }
+
     void CheckEndGameCondition(int dummy)
     {
+        Debug.Log(playData.currentEnemiesNum);
+        
         if (playData.currentEnemiesNum <= 0)
         {
             EventBus.Publish(EventType.ENDGAME);

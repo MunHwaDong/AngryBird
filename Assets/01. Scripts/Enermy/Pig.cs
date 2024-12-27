@@ -17,6 +17,8 @@ public class Pig : Breakable
     
     private Rigidbody2D rb;
     
+    private Coroutine _coroutine = null;
+    
     [SerializeField] private Sprite[] sprites;
     [SerializeField] private Sprite scoreSprite;
 
@@ -40,7 +42,9 @@ public class Pig : Breakable
         if (0 >= currentFracture)
         {
             isPlaying = true;
-            StartCoroutine(PlayDieAnimation());
+            
+            if(_coroutine == null)
+                _coroutine = StartCoroutine(PlayDieAnimation());
             
             return;
         }

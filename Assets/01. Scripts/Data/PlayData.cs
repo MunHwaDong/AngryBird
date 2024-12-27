@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Diagnostics;
 
 [System.Serializable]
 public class PlayData
@@ -20,10 +21,5 @@ public class PlayData
     public void UpdateCurrentScore(int score)
     {
         currentScore += score;
-    }
-
-    public void UpdateEnemiesNum(int dummy)
-    {
-        currentEnemiesNum--;
     }
 }
