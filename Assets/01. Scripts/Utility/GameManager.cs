@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -14,21 +15,26 @@ public class GameManager : Singleton<GameManager>
 
     public Animator collisionAnimation;
     
-    private PlayData playData;
-
-    public PlayData PlayData => playData;
+    private int _currentEnemiesNum;
 
     public delegate void OnFinishedInitBehaviours();
     public event OnFinishedInitBehaviours onFinishedInitBehaviours;
 
     void Awake()
     {
-        trajectoryQueue = FindObjectOfType<TrajectoryQueue>();
-        _endDirectingSound = GetComponent<AudioSource>();
-     
-        playData = new PlayData();
-        
-        InitStage();
+        base.Awake();
+
+        SceneManager.sceneLoaded += (scene, mode) =>
+        {
+            if (scene.name == "Stage 1-1")
+            {
+                trajectoryQueue = FindObjectOfType<TrajectoryQueue>();
+                _endDirectingSound = GetComponent<AudioSource>();
+                _currentEnemiesNum = 0;
+
+                InitStage();
+            }
+        };
     }
 
     private void InitStage()
@@ -39,21 +45,25 @@ public class GameManager : Singleton<GameManager>
         {
             if (breakObj is Pig)
             {
-                playData.currentEnemiesNum++;
+                _currentEnemiesNum++;
                 
                 breakObj.onDestoryBehaviour += UpdateCurrentEnemiesNum;
                 
-                breakObj.onDestoryBehaviour += playData.UpdateCurrentScore;
+                breakObj.onDestoryBehaviour +=
+                    DataManager.Instance.stageDatas[DataManager.Instance.currentStage].UpdateCurrentScore;
                 
                 breakObj.onDestoryBehaviour += CheckEndGameCondition;
             }
             else
             {
-                breakObj.onDestoryBehaviour += playData.UpdateCurrentScore;
+                breakObj.onDestoryBehaviour +=
+                    DataManager.Instance.stageDatas[DataManager.Instance.currentStage].UpdateCurrentScore;
             }
-            
+
             breakables.Add(breakObj.gameObject.GetInstanceID(), breakObj);
         }
+        
+        Debug.Log(_currentEnemiesNum);
         
         onFinishedInitBehaviours?.Invoke();
     }
@@ -80,12 +90,12 @@ public class GameManager : Singleton<GameManager>
 
     void UpdateCurrentEnemiesNum(int dummy)
     {
-        playData.currentEnemiesNum--;
+        _currentEnemiesNum--;
     }
 
     void CheckEndGameCondition(int dummy)
     {
-        if (playData.currentEnemiesNum <= 0)
+        if (_currentEnemiesNum <= 0)
         {
             StartCoroutine(EndDirectingCoroutine());
         }

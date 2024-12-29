@@ -16,6 +16,15 @@ public class StageButton : MonoBehaviour
         _button = GetComponentInParent<Button>();
         _text = GetComponent<TextMeshProUGUI>();
         
+        DataManager.Instance.currentStage = _text.text;
+
+        if (!DataManager.Instance.stageDatas.ContainsKey(DataManager.Instance.currentStage))
+        {
+            DataManager.Instance.stageDatas[DataManager.Instance.currentStage] = new PlayData();
+        }
+        
+        DataManager.Instance.Transition(new InGameState());
+        
         _button.onClick.AddListener(() => SceneManager.LoadScene(String.Concat("Stage ", _text.text)));
     }
 }

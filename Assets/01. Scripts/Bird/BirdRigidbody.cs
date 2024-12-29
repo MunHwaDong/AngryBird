@@ -26,7 +26,7 @@ public class BirdRigidbody : MonoBehaviour
 
         force = new Vector3(force.x, force.y, -1f);
         
-        _birdController.Rb.AddForce(force, ForceMode2D.Impulse);
+        _birdController.Rb.AddForceAtPosition(force, transform.position, ForceMode2D.Impulse);
 
         if (coroutine != null)
         {

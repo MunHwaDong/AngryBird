@@ -22,6 +22,8 @@ public class UIManager : MonoBehaviour
 
     void Init()
     {
+        Debug.Log("Wow!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        
         foreach (var breakable in GameManager.Instance.GetBreakables())
         {
             breakable.onDestoryBehaviour += UpdateScoreText;
