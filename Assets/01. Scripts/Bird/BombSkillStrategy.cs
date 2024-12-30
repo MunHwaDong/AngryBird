@@ -83,8 +83,8 @@ public class BombSkillStrategy : BirdSkillStrategy
             t += Time.deltaTime;
             
             Camera.main.transform.position = Random.insideUnitSphere * 2f + camOriginPos;
-            
-            yield return null;
+
+            yield return new WaitForFixedUpdate();
         }
         
         Camera.main.transform.position = camOriginPos;
