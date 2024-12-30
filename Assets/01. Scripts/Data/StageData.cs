@@ -5,6 +5,13 @@ using UnityEngine;
 [System.Serializable]
 public class StageData
 {
-    public int highScore;
-    public int stars;
+    public Dictionary<string, PlayData> playDatas = new Dictionary<string, PlayData>();
+
+    public StageData()
+    {
+        for (int i = 1; i <= DataManager.Instance.NumOfStage; i++)
+        {
+            playDatas.Add("1-" + i.ToString(), new PlayData());
+        }
+    }
 }

@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class InGameState : IState
 {
-    public override void SendData()
+    public InGameState()
+    {
+        DataManager.Instance.stageDatas[DataManager.Instance.currentStage].currentScore = 0;
+    }
+    
+    public void SendData()
     {
         throw new System.NotImplementedException();
     }
 
-    public override void LoadData()
+    public void LoadData()
     {
         throw new System.NotImplementedException();
-    }
-
-    public override void ProcessData()
-    {
-        
     }
 }

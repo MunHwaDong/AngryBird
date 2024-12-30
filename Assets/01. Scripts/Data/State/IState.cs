@@ -1,10 +1,6 @@
-public abstract class IState
+public interface IState
 {
-    protected DataManager dataManager;
-
-    public abstract void SendData();
+    public void SendData();
     
-    public abstract void LoadData();
-    
-    public abstract void ProcessData();
+    public void LoadData();
 }

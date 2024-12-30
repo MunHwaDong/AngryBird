@@ -17,7 +17,7 @@ public class BirdSpawner : MonoBehaviour
 
     void SpawnBird()
     {
-        int rand = Random.Range(1, bird.Count);
+        int rand = Random.Range(0, bird.Count);
         
         var newbird = Instantiate(bird[rand], transform.position, Quaternion.identity).GetComponent<Dragable>();
         

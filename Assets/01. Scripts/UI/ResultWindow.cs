@@ -23,7 +23,7 @@ public class ResultWindow : MonoBehaviour
 
     public void SetResult()
     {
-        PlayData currentStageData = GameManager.Instance.PlayData;
+        PlayData currentStageData = DataManager.Instance.stageDatas[DataManager.Instance.currentStage];
         
         resultSound.Play();
 
