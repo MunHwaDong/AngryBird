@@ -7,6 +7,8 @@
    3. Bomb : 물체와 충돌 시 일정 시간 후에 폭발 범위 안의 물체들에 피해를 줍니다.
 + 게임을 처음 실행 시켰을 때, Local에 User id 정보만을 가지는 UserData.json 파일을 생성합니다.
 + UserData.json에서 읽은 id로 firebase의 DB와 통신해서 플레이어의 각 스테이지의 플레이 기록을 불러옵니다.
+  ![image](https://github.com/user-attachments/assets/dbd70703-9178-4c40-a7b1-3d4c448cc1fe)
+
 
 # Pre-View
 ![Angry+Bird+2024-12-30+02-56-23+(1)+(1) (1)](https://github.com/user-attachments/assets/fa93f7de-4a08-4c60-b3e8-57eb0770948e)
