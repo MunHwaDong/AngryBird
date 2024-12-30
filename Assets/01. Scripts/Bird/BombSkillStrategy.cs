@@ -14,6 +14,8 @@ public class BombSkillStrategy : BirdSkillStrategy
     {
         if (_birdController == null) _birdController = birdController;
 
+        _birdController.Rb.mass = _birdController.Rb.mass * 10f;
+
         StartCoroutine(WaitExplosionTime());
     }
 
@@ -45,11 +47,9 @@ public class BombSkillStrategy : BirdSkillStrategy
         Explosion();
         
         _bc.BirdAudioSource.PlaySkillAudio();
+        _birdController.SpriteRenderer.color = Color.white;
 
         StartCoroutine(ShakeCameraCoroutine());
-        
-        _birdController.SpriteRenderer.color = Color.white;
-        
     }
     
     void Explosion()

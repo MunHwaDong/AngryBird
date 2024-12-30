@@ -20,6 +20,7 @@ public class Dragable : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDr
     
     private Vector3 force;
     private float SpriteOffset;
+    private const float maxPullLength = 25f;
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -31,6 +32,14 @@ public class Dragable : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDr
     {
         Vector3 newPosition = Camera.main.ScreenToWorldPoint(new Vector3(
             eventData.position.x, eventData.position.y, Camera.main.WorldToScreenPoint(transform.position).z));
+        
+        Vector3 difference = newPosition - startPosition;
+
+        if (difference.magnitude > maxPullLength)
+        {
+            difference = difference.normalized * maxPullLength;
+            newPosition = startPosition + difference;
+        }
 
         transform.position = endPosition = newPosition;
 
