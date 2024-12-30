@@ -23,6 +23,8 @@ public class BirdRigidbody : MonoBehaviour
     void ApplyForce(Vector3 force)
     {
         _birdController.Rb.gravityScale = 1f;
+
+        force /= _birdController.Rb.mass;
         
         force = new Vector2(force.x, force.y);
         

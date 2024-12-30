@@ -21,6 +21,7 @@ public class Dragable : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDr
     private Vector3 force;
     private float SpriteOffset;
     private const float maxPullLength = 25f;
+    private const float forceScale = 5f;
 
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -59,6 +60,6 @@ public class Dragable : MonoBehaviour, IPointerDownHandler, IDragHandler, IEndDr
         
         float scalar = forceDirection.magnitude;
         
-        force = forceDirection.normalized * scalar;
+        force = forceDirection.normalized * scalar * forceScale;
     }
 }
